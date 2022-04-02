@@ -81,17 +81,21 @@ public class ArrayTaskList {
         return tasks1;
     }
 
-    ArrayTaskList incoming(int from, int to)
-    {
-        ArrayTaskList actual = new ArrayTaskList();
 
-        for(Task temp:tasks)
-        {
-            if(temp.nextTimeAfter(from) < to && temp.nextTimeAfter(from) != -1)
-            {
-                actual.add(temp);
+    public ArrayTaskList incoming(int from, int to) {
+
+        int nextTaskTime;
+        ArrayTaskList returnArr = new ArrayTaskList();
+
+        for(short index = 0; index < iteratorNow; index++) {
+            nextTaskTime = tasks[index].nextTimeAfter(from);
+
+            if(nextTaskTime != -1 && nextTaskTime < to) {
+                returnArr.add(tasks[index]);
             }
         }
-        return actual;
+
+        return returnArr;
     }
+
 }
