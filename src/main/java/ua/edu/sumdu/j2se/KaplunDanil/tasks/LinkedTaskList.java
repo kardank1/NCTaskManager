@@ -1,8 +1,7 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList{
     private Node head;
-    private int size;
 
     public class Node
     {
@@ -100,27 +99,5 @@ public class LinkedTaskList {
         return currentNode.task;
     }
 
-
-
-    public LinkedTaskList incoming(int from, int to){
-        if(from > to) {
-            throw new IllegalArgumentException("Invalid interval parameters!");
-        }
-
-        int nextTaskTime;
-        LinkedTaskList returnArr = new LinkedTaskList();
-        Node currentNode = head;
-
-        while(currentNode.next != null){
-            nextTaskTime = currentNode.task.nextTimeAfter(from);
-
-            if(nextTaskTime != -1 && nextTaskTime < to) {
-                returnArr.add(currentNode.task);
-            }
-            currentNode = currentNode.next;
-        }
-
-        return returnArr;
-    }
 
 }

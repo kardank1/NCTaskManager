@@ -1,14 +1,13 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList{
     private int num;
     private Task [] tasks;
-    private int iteratorNow;
 
     public ArrayTaskList(){
         num = 1;
         tasks = new Task[num];
-        iteratorNow = 0;
+        size = 0;
     }
 
     public void add(Task task)
@@ -17,9 +16,9 @@ public class ArrayTaskList {
             throw new NullPointerException("null argument!");
         }
 
-        tasks[iteratorNow] = task;
-        iteratorNow++;
-        if(iteratorNow == num)
+        tasks[size] = task;
+        size++;
+        if(size == num)
         {
            tasks = sizeIncrease(tasks);
         }
@@ -30,7 +29,7 @@ public class ArrayTaskList {
     {
         boolean rem = false;
 
-        for(int i = 0; i < iteratorNow; i++)
+        for(int i = 0; i < size; i++)
         {
             if(task.equals(tasks[i]) && !rem)
             {
@@ -47,9 +46,9 @@ public class ArrayTaskList {
 
         if(rem)
         {
-            iteratorNow--;
+            size--;
         }
-        if(iteratorNow < num - 5)
+        if(size < num - 5)
         {
            tasks = sizeDecrease(tasks);
         }
@@ -59,12 +58,12 @@ public class ArrayTaskList {
 
     public int size()
     {
-        return iteratorNow;
+        return size;
     }
 
     public Task getTask(int index)
     {
-        if(index < 0 || index > iteratorNow){
+        if(index < 0 || index > size){
             throw new ArrayIndexOutOfBoundsException("invalid index!");
         }
         return tasks[index];
@@ -87,29 +86,6 @@ public class ArrayTaskList {
         System.arraycopy(tasks, 0, tasks1, 0, tasks.length);
         return tasks1;
     }
-
-
-    public ArrayTaskList incoming(int from, int to){
-
-        if(from > to) {
-            throw new IllegalArgumentException("Invalid interval parameters!");
-        }
-
-
-        int nextTaskTime;
-        ArrayTaskList returnArr = new ArrayTaskList();
-
-        for(short index = 0; index < iteratorNow; index++) {
-            nextTaskTime = tasks[index].nextTimeAfter(from);
-
-            if(nextTaskTime != -1 && nextTaskTime < to) {
-                returnArr.add(tasks[index]);
-            }
-        }
-
-        return returnArr;
-    }
-
 
 
 }
