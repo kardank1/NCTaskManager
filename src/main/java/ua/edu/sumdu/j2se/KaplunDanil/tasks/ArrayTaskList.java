@@ -13,6 +13,10 @@ public class ArrayTaskList {
 
     public void add(Task task)
     {
+        if(task == null){
+            throw new NullPointerException("null argument!");
+        }
+
         tasks[iteratorNow] = task;
         iteratorNow++;
         if(iteratorNow == num)
@@ -60,6 +64,9 @@ public class ArrayTaskList {
 
     public Task getTask(int index)
     {
+        if(index < 0 || index > iteratorNow){
+            throw new ArrayIndexOutOfBoundsException("invalid index!");
+        }
         return tasks[index];
     }
 
@@ -82,7 +89,12 @@ public class ArrayTaskList {
     }
 
 
-    public ArrayTaskList incoming(int from, int to) {
+    public ArrayTaskList incoming(int from, int to){
+
+        if(from > to) {
+            throw new IllegalArgumentException("Invalid interval parameters!");
+        }
+
 
         int nextTaskTime;
         ArrayTaskList returnArr = new ArrayTaskList();
@@ -97,5 +109,7 @@ public class ArrayTaskList {
 
         return returnArr;
     }
+
+
 
 }

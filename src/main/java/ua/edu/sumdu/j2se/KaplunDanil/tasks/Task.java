@@ -11,6 +11,11 @@ public class Task {
 
 
     public Task(String title, int time){
+
+        if(time < 0){
+            throw new IllegalArgumentException("Invalid arguments!");
+        }
+
         this.title = title;
         this.time = time;
         repeat = false;
@@ -18,6 +23,14 @@ public class Task {
     }
 
     public Task(String title, int start, int end, int interval){
+
+        if(start > end) {
+            throw new IllegalArgumentException("Invalid interval parametrs!");
+        }
+        if(interval < 0){
+            throw new IllegalArgumentException("Invalid arguments!");
+        }
+
         this.title = title;
         time = start;
         this.start = start;
@@ -50,6 +63,9 @@ public class Task {
 
     public void setTime(int time)
     {
+        if(time < 0){
+            throw new IllegalArgumentException("Invalid argument!");
+        }
         this.time = time;
         repeat = false;
     }
@@ -92,6 +108,12 @@ public class Task {
 
     public void setTime(int start, int end, int interval)
     {
+        if(start > end) {
+            throw new IllegalArgumentException("Invalid interval parametrs!");
+        }
+        if(interval < 0){
+            throw new IllegalArgumentException("Invalid arguments!");
+        }
         this.start = start;
         this.end = end;
         this.interval = interval;
@@ -105,6 +127,10 @@ public class Task {
     }
 
     public int nextTimeAfter(int current){
+        if(current < 0){
+            throw new IllegalArgumentException ("Invalid argument!");
+        }
+
         if(!active)
         {
             return  -1;
