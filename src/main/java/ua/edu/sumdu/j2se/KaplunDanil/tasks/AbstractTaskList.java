@@ -1,6 +1,6 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
-public abstract class AbstractTaskList {
+public abstract class AbstractTaskList implements Iterable<Task> {
 
     protected int size;
     protected static ListTypes.types type;

@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
+import java.util.Iterator;
+
 public class LinkedTaskList extends AbstractTaskList{
     private Node head;
 
@@ -99,5 +101,31 @@ public class LinkedTaskList extends AbstractTaskList{
         return currentNode.task;
     }
 
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
 
+            private Node node = head.next;
+            private Node previousNode = head;
+
+
+            @Override
+            public boolean hasNext() {
+                return node != null;
+            }
+
+            @Override
+            public Task next() {
+                if(node == null) {
+                    throw new ArrayIndexOutOfBoundsException("Iterator reached last position!");
+                }
+                if(previousNode.next.next == node) {
+                    previousNode = previousNode.next;
+                }
+                node = node.next;
+                return previousNode.next.task;
+
+            }
+        };
+    }
 }

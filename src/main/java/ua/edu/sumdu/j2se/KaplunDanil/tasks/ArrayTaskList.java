@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
+import java.util.Iterator;
+
 public class ArrayTaskList extends AbstractTaskList{
     private int num;
     private Task [] tasks;
@@ -87,5 +89,26 @@ public class ArrayTaskList extends AbstractTaskList{
         return tasks1;
     }
 
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>() {
 
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            @Override
+            public Task next() {
+                if(index == size) {
+                    throw new ArrayIndexOutOfBoundsException("Iterator reached last position!");
+                }
+                return tasks[index++];
+            }
+
+
+        };
+    }
 }
