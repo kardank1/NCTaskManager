@@ -1,6 +1,9 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class ArrayTaskList extends AbstractTaskList{
     private int num;
@@ -27,49 +30,40 @@ public class ArrayTaskList extends AbstractTaskList{
 
     }
 
-    public boolean remove(Task task)
-    {
-        boolean rem = false;
+    public boolean remove(Task task) {
+        if (task == null) {
+            throw new NullPointerException("Task object parameter has null value!");
+        }
 
-        for(int i = 0; i < size; i++)
-        {
-            if(task.equals(tasks[i]) && !rem)
-            {
+        boolean status = false;
+        int index_to_del;
 
-                tasks[i] = null;
-                rem = true;
-            }
-            if(rem)
-            {
-                tasks[i] = tasks[i+1];
-                tasks[i+1] = null;
+        for (index_to_del = 0; index_to_del < size; index_to_del++) {
+            if (tasks[index_to_del].equals(task)) {
+                status = true;
+                break;
             }
         }
 
-        if(rem)
-        {
-            size--;
-        }
-        if(size < num - 5)
-        {
-           tasks = sizeDecrease(tasks);
+        if (!status) {
+            return false;
         }
 
-        return rem;
-    }
+        tasks[index_to_del] = null;
+        size--;
 
-    public int size()
-    {
-        return size;
-    }
-
-    public Task getTask(int index)
-    {
-        if(index < 0 || index > size){
-            throw new ArrayIndexOutOfBoundsException("invalid index!");
+        if (index_to_del != size) {
+            System.arraycopy(tasks, index_to_del + 1, tasks, index_to_del, size - index_to_del);
         }
-        return tasks[index];
+
+        if (tasks.length - 5 == size && size != 0) {
+            Task[] tempArray = new Task[size];
+            System.arraycopy(tasks, 0, tempArray, 0, size);
+            tasks = tempArray;
+        }
+        return true;
     }
+
 
     public Task[] sizeIncrease(Task [] tasks)
     {
@@ -89,26 +83,59 @@ public class ArrayTaskList extends AbstractTaskList{
         return tasks1;
     }
 
-    @Override
-    public Iterator<Task> iterator() {
-        return new Iterator<Task>() {
-
-            int index = 0;
+    public Iterator<Task> iterator()
+    {
+        return new Iterator()
+        {
+            private int index = -1;
 
             @Override
             public boolean hasNext() {
-                return index < size;
+                return (index + 1 < size());
             }
 
             @Override
             public Task next() {
-                if(index == size) {
-                    throw new ArrayIndexOutOfBoundsException("Iterator reached last position!");
-                }
-                return tasks[index++];
+                return getTask(++index);
             }
 
-
+            @Override
+            public void remove() {
+                if (index < 0) throw new IllegalStateException("Итератор на нулевом элементе!");
+                ArrayTaskList.this.remove(getTask(index));
+                index--;
+            }
         };
     }
+
+    public int size()
+    {
+        return size;
+    }
+
+    public Task getTask(int index)
+    {
+        if(index >= 0 && index <= size) {
+            return tasks[index];
+            //return TaskList.get(index);
+        }
+        else
+        {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @Override
+    public ArrayTaskList clone() {
+        return (ArrayTaskList) super.clone();
+    }
+
+    @Override
+    public int hashCode() { return super.hashCode(); }
+    public Stream<Task> getStream()
+    {
+        return Arrays.stream(this.tasks).filter(Objects::nonNull);
+    }
 }
+
+

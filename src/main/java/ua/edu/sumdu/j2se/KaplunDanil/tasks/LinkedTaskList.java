@@ -1,12 +1,15 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
-import java.util.Iterator;
 
-public class LinkedTaskList extends AbstractTaskList{
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+public class LinkedTaskList extends AbstractTaskList {
     private Node head;
 
-    public class Node
-    {
+    public class Node {
         public Task task;
         public Node next;
 
@@ -16,14 +19,13 @@ public class LinkedTaskList extends AbstractTaskList{
         }
     }
 
-    public LinkedTaskList(){
+    public LinkedTaskList() {
         head = null;
         size = 0;
     }
 
-    public void add(Task task)
-    {
-        if(task == null){
+    public void add(Task task) {
+        if (task == null) {
             throw new NullPointerException("null argument!");
         }
 
@@ -32,8 +34,7 @@ public class LinkedTaskList extends AbstractTaskList{
 
         if (size == 0) {
             head = newNode;
-        }
-        else {
+        } else {
             while (currentNode.next != null) {
                 currentNode = currentNode.next;
             }
@@ -44,7 +45,7 @@ public class LinkedTaskList extends AbstractTaskList{
     }
 
     public boolean remove(Task task) {
-        if(task == null) {
+        if (task == null) {
             throw new NullPointerException(
                     "Task object parameter has null value!"
             );
@@ -52,18 +53,18 @@ public class LinkedTaskList extends AbstractTaskList{
 
         Node currentNode = head;
 
-        if(size == 0) {
+        if (size == 0) {
             return false;
         }
 
-        if(currentNode.task.equals(task)){
+        if (currentNode.task.equals(task)) {
             head = currentNode.next;
             size--;
             return true;
         }
 
-        while(currentNode.next != null) {
-            if(currentNode.next.task.equals(task)) {
+        while (currentNode.next != null) {
+            if (currentNode.next.task.equals(task)) {
                 currentNode.next = currentNode.next.next;
                 size--;
                 return true;
@@ -75,23 +76,21 @@ public class LinkedTaskList extends AbstractTaskList{
         return false;
     }
 
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
-    public Task getTask(int index)
-    {
-        if(index < 0 || index > size){
+    public Task getTask(int index) {
+        if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException("invalid index!");
         }
 
         Node currentNode = head;
         int counter = 0;
 
-        while(currentNode.next != null){
+        while (currentNode.next != null) {
 
-            if(index == counter){
+            if (index == counter) {
                 break;
             }
             counter++;
@@ -101,31 +100,45 @@ public class LinkedTaskList extends AbstractTaskList{
         return currentNode.task;
     }
 
-    @Override
+
     public Iterator<Task> iterator() {
-        return new Iterator<Task>() {
+        return new Iterator() {
+            private int index = -1;
 
-            private Node node = head.next;
-            private Node previousNode = head;
-
-
-            @Override
             public boolean hasNext() {
-                return node != null;
+                return (index + 1 < size());
             }
 
-            @Override
             public Task next() {
-                if(node == null) {
-                    throw new ArrayIndexOutOfBoundsException("Iterator reached last position!");
-                }
-                if(previousNode.next.next == node) {
-                    previousNode = previousNode.next;
-                }
-                node = node.next;
-                return previousNode.next.task;
+                return getTask(++index);
+            }
 
+            public void remove() {
+                if (index < 0) throw new IllegalStateException("Итератор на нулевом элементе!");
+                LinkedTaskList.this.remove(getTask(index));
+                --index;
             }
         };
+    }
+
+
+    @Override
+    public LinkedTaskList clone() {
+        return (LinkedTaskList) super.clone();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+    @Override
+    public Stream<Task> getStream()
+    {
+        Task[] tasks = new Task[this.size()];
+        for(int i = 0; i < this.size(); i++)
+        {
+            tasks[i]=this.getTask(i);
+        }
+        return Arrays.stream(tasks).filter(Objects::nonNull);
     }
 }

@@ -1,6 +1,8 @@
 package ua.edu.sumdu.j2se.KaplunDanil.tasks;
 
-public class Task {
+import java.util.Objects;
+
+public class Task implements Cloneable{
     private String title;
     private int time;
     private int start;
@@ -21,6 +23,8 @@ public class Task {
         repeat = false;
         active = false;
     }
+
+    public Task(){}
 
     public Task(String title, int start, int end, int interval){
 
@@ -162,5 +166,67 @@ public class Task {
                 return temp;
             }
         }
+    }
+    @Override
+    public String toString()
+    {
+        String temp = "Название - " + this.title + ", Активна - ";
+        if(this.active)
+        {
+            temp += "Да";
+        }
+        else
+        {
+            temp += "Нет";
+        }
+        temp += ", Есть повтор - ";
+        if(this.repeat)
+        {
+            temp += "Да";
+            temp += ", Начало - " + this.start + ", Конец - " + this.end + ", Интервал - " + this.interval + "\n";
+        }
+        else
+        {
+            temp += "Нет";
+            temp += ", Время - " + this.time + "\n";
+        }
+        return temp;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.title, this.active, this.repeat, this.time, this.start, this.end, this.interval);
+    }
+
+    @Override
+    public Task clone()
+    {
+        //return new Task(this.title, this.time, this.start, this.end, this.interval, this.active, this.repeated);
+        Task temp = new Task();
+        temp.title = this.title;
+        temp.active = this.active;
+        temp.repeat = this.repeat;
+        temp.time = this.time;
+        temp.start = this.start;
+        temp.end = this.end;
+        temp.interval = this.interval;
+        return temp;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+        {
+            return true;
+        }
+        Task convert = (Task) obj;
+        if(this.repeat != convert.repeat || this.active != convert.active || this.time != convert.time
+                || !Objects.equals(this.title, convert.title) || this.interval != convert.interval
+                || this.start != convert.start || this.end != convert.end)
+        {
+            return false;
+        }
+        return true;
     }
 }
